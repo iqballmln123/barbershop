@@ -1,16 +1,21 @@
-import { GeistSans } from "geist/font/sans";
-import { type AppType } from "next/app";
+import type { AppProps } from "next/app"
+import Head from "next/head"
+import "../styles/globals.css"
 
-import { api } from "~/utils/api";
-
-import "~/styles/globals.css";
-
-const MyApp: AppType = ({ Component, pageProps }) => {
+export default function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <div className={GeistSans.className}>
+    <>
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
       <Component {...pageProps} />
-    </div>
-  );
-};
+    </>
+  )
+}
 
-export default api.withTRPC(MyApp);
