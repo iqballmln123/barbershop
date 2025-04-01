@@ -112,7 +112,7 @@ export default function BarberShopDashboard() {
                   {item.charAt(0).toUpperCase() + item.slice(1)}
                 </button>
               ))}
-              <Button className="bg-neutral-900 hover:bg-neutral-800 text-white">Book Now</Button>
+              <Button className="bg-neutral-900 hover:bg-neutral-800 text-white">Sign In</Button>
             </nav>
 
             <Button variant="ghost" size="icon" className="md:hidden">
