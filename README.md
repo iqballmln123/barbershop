@@ -27,3 +27,10 @@ You can check out the [create-t3-app GitHub repository](https://github.com/t3-os
 ## How do I deploy this?
 
 Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+
+
+.env (karna sering lupa)
+DATABASE_URL="postgresql://postgres:password@localhost:5432/culture_barbershop"
+DIRECT_URL="postgresql://postgres.xycoelxjqalawxluwdvr:$6MSGhNgm9!vna!@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres"
+NEXT_PUBLIC_SUPABASE_URL="https://xycoelxjqalawxluwdvr.supabase.co"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5Y29lbHhqcWFsYXd4bHV3ZHZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIwMjI0ODAsImV4cCI6MjA1NzU5ODQ4MH0.hlMFDaaGsnAwTsDUTKH7vtuoYe647w7QSfbLTBiLxVg"
