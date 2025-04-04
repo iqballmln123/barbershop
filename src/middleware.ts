@@ -1,28 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createServerClient } from '@supabase/ssr';
 
 // Fungsi ini akan dipanggil pada setiap request yang masuk
 export async function middleware(req: NextRequest) {
   // Dapatkan response yang dapat dimodifikasi
   const res = NextResponse.next();
 
-  // Dapatkan cookies dari request
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
-  
-  // Membuat klien supabase
-  const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false,
-    },
-    global: {
-      headers: {
-        // Forward cookies dari request
-        cookie: req.headers.get('cookie') || '',
+  // Membuat klien supabase untuk server-side
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
+    {
+      cookies: {
+        get: (name) => req.cookies.get(name)?.value,
+        set: (name, value, options) => {
+          res.cookies.set({ name, value, ...options });
+        },
+        remove: (name, options) => {
+          res.cookies.set({ name, value: '', ...options });
+        },
       },
-    },
-  });
+    }
+  );
   
   try {
     // Mendapatkan sesi pengguna saat ini
@@ -33,6 +32,21 @@ export async function middleware(req: NextRequest) {
     if (!session && req.nextUrl.pathname.startsWith('/protected')) {
       const redirectUrl = new URL('/login', req.url);
       return NextResponse.redirect(redirectUrl);
+    }
+
+    // Jika ada sesi, cek role untuk halaman admin
+    if (session && req.nextUrl.pathname.startsWith('/protected/admin')) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('user_id', session.user.id)
+        .single();
+      
+      // Jika bukan admin, redirect ke dashboard biasa
+      if (!profile || profile.role !== 'admin') {
+        const redirectUrl = new URL('/protected/dashboard', req.url);
+        return NextResponse.redirect(redirectUrl);
+      }
     }
   } catch (error) {
     console.error('Middleware error:', error);
